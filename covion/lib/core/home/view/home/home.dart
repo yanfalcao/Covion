@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:covion/controller/GeneralHelper.dart';
 import 'package:covion/model/status_global.dart';
@@ -28,145 +30,107 @@ class Dashboard{
     );
   }
 
-  Widget board(bool loading){
-    if(loading){
+  Widget board(bool isLoading){
+    if(isLoading){
       return Stack(
         children: <Widget>[
           pageState.appBar(),
-          infectionLoading(),
-          deathsLoading(),
-          recoveredLoading(),
-          newCasesLoading(),
-          newDeathsLoading()
+          ShimmerBox(
+            alignment: Alignment(0, -0.6),
+            isMainBox: true,
+            context: context
+          ).build(),
+          ShimmerBox(
+            alignment: Alignment(-0.82, 0.18),
+            isMainBox: false,
+            context: context
+          ).build(),
+          ShimmerBox(
+            alignment: Alignment(0.82, 0.18),
+            isMainBox: false,
+            context: context
+          ).build(),
+          ShimmerBox(
+            alignment: Alignment(-0.82, 0.92),
+            isMainBox: false,
+            context: context
+          ).build(),
+          ShimmerBox(
+            alignment: Alignment(0.82, 0.92),
+            isMainBox: false,
+            context: context
+          ).build()
         ],
       );
     }
     return Stack(
       children: <Widget>[
         pageState.appBar(),
-        infection(),
-        deaths(),
-        recovered(),
-        newCases(),
-        newDeaths()
+        DashboardBox(
+          alignment: Alignment(0, -0.6),
+          isMainBox: true,
+          data: statusGlobal.infected.toString(),
+          label: 'Infected',
+          color: Color(0xFF6A77CC),
+          context: context
+        ).build(),
+        DashboardBox(
+            alignment: Alignment(-0.82, 0.18),
+            isMainBox: false,
+            data: statusGlobal.deaths.toString(),
+            label: 'Deaths',
+            color: Color(0xFFE15E5E),
+            context: context
+        ).build(),
+        DashboardBox(
+            alignment: Alignment(0.82, 0.18),
+            isMainBox: false,
+            data: statusGlobal.recovered.toString(),
+            label: 'Recovered',
+            color: Color(0xFF23C74F),
+            context: context
+        ).build(),
+        DashboardBox(
+            alignment: Alignment(-0.82, 0.92),
+            isMainBox: false,
+            data: statusGlobal.newCases.toString(),
+            label: 'New Cases Today',
+            color: Color(0xFF8836CF),
+            context: context
+        ).build(),
+        DashboardBox(
+            alignment: Alignment(0.82, 0.92),
+            isMainBox: false,
+            data: statusGlobal.newDeaths.toString(),
+            label: 'New Deaths Today',
+            color: Color(0xFFE15E5E),
+            context: context
+        ).build()
       ],
     );
   }
+}
 
-  Widget infection(){
-    return Align(
-      alignment: Alignment(0, -0.6),
-      child: Container(
-        height: Height(context, 25),
-        width: Width(context, 90),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-            color: Color(0xffffffff),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xffabb7c5),
-                blurRadius: 6.0,
-                spreadRadius: 1.0,
-                offset: Offset(
-                  3,
-                  3.0,
-                ),
-              )
-            ]
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(15),
-                child: textInBox(
-                  statusGlobal.infected.toString(),
-                  Color(0xFF6A77CC),
-                  60,
-                  25
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                child: textInBox(
-                  'Infected',
-                  Color(0xFF6A77CC),
-                  26,
-                  15
-                ),
-              )
-            ],
-          ),
-        )
-      ),
-    );
-  }
+class DashboardBox{
+  Alignment alignment;
+  bool isMainBox;
+  String data;
+  String label;
+  Color color;
+  BuildContext context;
 
-  Widget infectionLoading(){
+  DashboardBox({this.alignment, this.isMainBox, this.data, this.label, this.color, this.context});
+
+  Widget build(){
     return Align(
-      alignment: Alignment(0, -0.6),
+      alignment: this.alignment,
       child: Container(
-          height: Height(context, 25),
-          width: Width(context, 90),
+          height: isMainBox ? Height(context, 25) : Height(context, 23),
+          width: isMainBox ? Width(context, 90) : Width(context, 43),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
               color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(15),
-                  width: 250,
-                  height: 45,
-                  child: shimmer()
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                  width: 150,
-                  height: 25,
-                  child: shimmer()
-                )
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-  Widget deaths(){
-    return Align(
-      alignment: Alignment(-0.82, 0.18),
-      child: Container(
-          height: Height(context, 23),
-          width: Width(context, 43),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
+              boxShadow: [boxShadow()]
           ),
           child: Center(
             child: Column(
@@ -175,17 +139,17 @@ class Dashboard{
                 Container(
                   margin: EdgeInsets.all(15),
                   child: textInBox(
-                      statusGlobal.deaths.toString(),
-                      Color(0xFFE15E5E),
-                      40,
+                      this.data,
+                      this.color,
+                      isMainBox ? 60 : 50,
                       25
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
                   child: textInBox(
-                      'Deaths',
-                      Color(0xFFE15E5E),
+                      this.label,
+                      this.color,
                       26,
                       15
                   ),
@@ -197,331 +161,12 @@ class Dashboard{
     );
   }
 
-  Widget deathsLoading(){
-    return Align(
-      alignment: Alignment(-0.82, 0.18),
-      child: Container(
-          height: Height(context, 23),
-          width: Width(context, 43),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(15),
-                  width: 150,
-                  height: 40,
-                  child: shimmer()
-                ),
-                Container(
-                  width: 100,
-                  height: 25,
-                  margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                  child: shimmer()
-                )
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-  Widget recovered(){
-    return Align(
-      alignment: Alignment(0.82, 0.18),
-      child: Container(
-          height: Height(context, 23),
-          width: Width(context, 43),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(15),
-                  child: textInBox(
-                      statusGlobal.recovered.toString(),
-                      Color(0xFF23C74F),
-                      40,
-                      25
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                  child: textInBox(
-                      'Recovered',
-                      Color(0xFF23C74F),
-                      26,
-                      15
-                  ),
-                )
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-  Widget recoveredLoading(){
-    return Align(
-      alignment: Alignment(0.82, 0.18),
-      child: Container(
-          height: Height(context, 23),
-          width: Width(context, 43),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.all(15),
-                    width: 150,
-                    height: 40,
-                    child: shimmer()
-                ),
-                Container(
-                    width: 100,
-                    height: 25,
-                    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                    child: shimmer()
-                )
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-  Widget newCases(){
-    return Align(
-      alignment: Alignment(-0.82, 0.92),
-      child: Container(
-          height: Height(context, 23),
-          width: Width(context, 43),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(15),
-                  child: textInBox(
-                      statusGlobal.newCases.toString(),
-                      Color(0xFF8836CF),
-                      50,
-                      25
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                  child: textInBox(
-                      'New Cases Today',
-                      Color(0xFF8836CF),
-                      26,
-                      15
-                  ),
-                )
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-  Widget newCasesLoading(){
-    return Align(
-      alignment: Alignment(-0.82, 0.92),
-      child: Container(
-          height: Height(context, 23),
-          width: Width(context, 43),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.all(15),
-                    width: 150,
-                    height: 40,
-                    child: shimmer()
-                ),
-                Container(
-                    width: 100,
-                    height: 25,
-                    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                    child: shimmer()
-                )
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-  Widget newDeaths(){
-    return Align(
-      alignment: Alignment(0.82, 0.92),
-      child: Container(
-          height: Height(context, 23),
-          width: Width(context, 43),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(15),
-                  child: textInBox(
-                      statusGlobal.newDeaths.toString(),
-                      Color(0xFF8836CF),
-                      50,
-                      25
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                  child: textInBox(
-                      'New Deaths Today',
-                      Color(0xFF8836CF),
-                      26,
-                      15
-                  ),
-                )
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-  Widget newDeathsLoading(){
-    return Align(
-      alignment: Alignment(0.82, 0.92),
-      child: Container(
-          height: Height(context, 23),
-          width: Width(context, 43),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xffffffff),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xffabb7c5),
-                  blurRadius: 6.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(
-                    3,
-                    3.0,
-                  ),
-                )
-              ]
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.all(15),
-                    width: 150,
-                    height: 40,
-                    child: shimmer()
-                ),
-                Container(
-                    width: 100,
-                    height: 25,
-                    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                    child: shimmer()
-                )
-              ],
-            ),
-          )
-      ),
-    );
-  }
+  BoxShadow boxShadow() => BoxShadow(
+    color: Color(0xffabb7c5),
+    blurRadius: 6.0,
+    spreadRadius: 1.0,
+    offset: Offset(3, 3.0),
+  );
 
   Widget textInBox(String text, Color color, double size, double minSize){
     RegExp reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
@@ -538,12 +183,59 @@ class Dashboard{
       minFontSize: minSize,
     );
   }
+}
 
-  Widget shimmer(){
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[200],
-      highlightColor: Colors.white,
-      child: Image.asset('rect.jpg', fit: BoxFit.fill,),
+class ShimmerBox{
+  Alignment alignment;
+  bool isMainBox;
+  BuildContext context;
+
+  ShimmerBox({this.alignment, this.isMainBox, this.context});
+
+  Widget build(){
+    return Align(
+      alignment: this.alignment,
+      child: Container(
+          height: isMainBox ? Height(context, 25) : Height(context, 23),
+          width: isMainBox ? Width(context, 90) : Width(context, 43),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              color: Color(0xffffffff),
+              boxShadow: [boxShadow()]
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                    margin: EdgeInsets.all(15),
+                    width: isMainBox ? 250 : 150,
+                    height: isMainBox ? 45 : 40,
+                    child: shimmer()
+                ),
+                Container(
+                    width: isMainBox ? 150 : 100,
+                    height: isMainBox ? 25 : 25,
+                    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+                    child: shimmer()
+                )
+              ],
+            ),
+          )
+      ),
     );
   }
+
+  Widget shimmer() => Shimmer.fromColors(
+    baseColor: Colors.grey[200],
+    highlightColor: Colors.white,
+    child: Image.asset('rect.jpg', fit: BoxFit.fill,),
+  );
+
+  BoxShadow boxShadow() => BoxShadow(
+    color: Color(0xffabb7c5),
+    blurRadius: 6.0,
+    spreadRadius: 1.0,
+    offset: Offset(3, 3.0),
+  );
 }
