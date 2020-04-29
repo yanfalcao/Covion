@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:covion/controller/GeneralHelper.dart';
@@ -19,95 +20,100 @@ class Dashboard{
   Widget build(){
     return FutureBuilder<StatusGlobal>(
       future: StatusGlobalService().fetchStatus(),
+      // ignore: missing_return
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
-          statusGlobal = snapshot.data;
-          return board(false);
+          if(snapshot.error != null){
+            pageState.checkInternetConnectivity();
+          }else{
+            statusGlobal = snapshot.data;
+            return board(false);
+          }
         }
         return board(true);
-//        return Center(child: CircularProgressIndicator(),);
       },
     );
   }
 
   Widget board(bool isLoading){
-    if(isLoading){
+    if(!isLoading){
+      return Stack(
+        children: <Widget>[
+          pageState.appBar(),
+          DashboardBox(
+              alignment: Alignment(0, -0.6),
+              isMainBox: true,
+              data: statusGlobal.infected.toString(),
+              label: 'Infected',
+              color: Color(0xFF6A77CC),
+              context: context
+          ).build(),
+          DashboardBox(
+              alignment: Alignment(-0.82, 0.18),
+              isMainBox: false,
+              data: statusGlobal.deaths.toString(),
+              label: 'Deaths',
+              color: Color(0xFFE15E5E),
+              context: context
+          ).build(),
+          DashboardBox(
+              alignment: Alignment(0.82, 0.18),
+              isMainBox: false,
+              data: statusGlobal.recovered.toString(),
+              label: 'Recovered',
+              color: Color(0xFF23C74F),
+              context: context
+          ).build(),
+          DashboardBox(
+              alignment: Alignment(-0.82, 0.92),
+              isMainBox: false,
+              data: statusGlobal.newCases.toString(),
+              label: 'New Cases Today',
+              color: Color(0xFF8836CF),
+              context: context
+          ).build(),
+          DashboardBox(
+              alignment: Alignment(0.82, 0.92),
+              isMainBox: false,
+              data: statusGlobal.newDeaths.toString(),
+              label: 'New Deaths Today',
+              color: Color(0xFFE15E5E),
+              context: context
+          ).build()
+        ],
+      );
+    }else{
       return Stack(
         children: <Widget>[
           pageState.appBar(),
           ShimmerBox(
-            alignment: Alignment(0, -0.6),
-            isMainBox: true,
-            context: context
+              alignment: Alignment(0, -0.6),
+              isMainBox: true,
+              context: context
           ).build(),
           ShimmerBox(
-            alignment: Alignment(-0.82, 0.18),
-            isMainBox: false,
-            context: context
+              alignment: Alignment(-0.82, 0.18),
+              isMainBox: false,
+              context: context
           ).build(),
           ShimmerBox(
-            alignment: Alignment(0.82, 0.18),
-            isMainBox: false,
-            context: context
+              alignment: Alignment(0.82, 0.18),
+              isMainBox: false,
+              context: context
           ).build(),
           ShimmerBox(
-            alignment: Alignment(-0.82, 0.92),
-            isMainBox: false,
-            context: context
+              alignment: Alignment(-0.82, 0.92),
+              isMainBox: false,
+              context: context
           ).build(),
           ShimmerBox(
-            alignment: Alignment(0.82, 0.92),
-            isMainBox: false,
-            context: context
+              alignment: Alignment(0.82, 0.92),
+              isMainBox: false,
+              context: context
           ).build()
         ],
       );
     }
-    return Stack(
-      children: <Widget>[
-        pageState.appBar(),
-        DashboardBox(
-          alignment: Alignment(0, -0.6),
-          isMainBox: true,
-          data: statusGlobal.infected.toString(),
-          label: 'Infected',
-          color: Color(0xFF6A77CC),
-          context: context
-        ).build(),
-        DashboardBox(
-            alignment: Alignment(-0.82, 0.18),
-            isMainBox: false,
-            data: statusGlobal.deaths.toString(),
-            label: 'Deaths',
-            color: Color(0xFFE15E5E),
-            context: context
-        ).build(),
-        DashboardBox(
-            alignment: Alignment(0.82, 0.18),
-            isMainBox: false,
-            data: statusGlobal.recovered.toString(),
-            label: 'Recovered',
-            color: Color(0xFF23C74F),
-            context: context
-        ).build(),
-        DashboardBox(
-            alignment: Alignment(-0.82, 0.92),
-            isMainBox: false,
-            data: statusGlobal.newCases.toString(),
-            label: 'New Cases Today',
-            color: Color(0xFF8836CF),
-            context: context
-        ).build(),
-        DashboardBox(
-            alignment: Alignment(0.82, 0.92),
-            isMainBox: false,
-            data: statusGlobal.newDeaths.toString(),
-            label: 'New Deaths Today',
-            color: Color(0xFFE15E5E),
-            context: context
-        ).build()
-      ],
-    );
   }
 }
 

@@ -1,9 +1,10 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:covion/controller/GeneralHelper.dart';
+import 'package:covion/core/home/view/custom_dialog.dart';
 import 'package:covion/core/home/view/helper.dart';
 import 'package:covion/core/home/view/home/home.dart';
-import 'package:covion/resource/color.dart';
 import 'package:covion/resource/icons/custom_bar_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,37 +88,57 @@ class MyHomePageState extends State<MyHomePage> {
 
   Widget _navigationBar() => BottomNavigationBar(
     items: [
-      AppBarItem(
-          CustomBar.bar_chart,
-          "Analitycs"
-      ),
-      AppBarItem(
-        CustomBar.home_run,
-        "Home"
-      ),
-      AppBarItem(
-        CustomBar.settings,
-        "Configure"
-      )
+      AppBarItem(CustomBar.bar_chart, "Analitycs"),
+      AppBarItem(CustomBar.home_run, "Home"),
+      AppBarItem(CustomBar.settings, "Configure")
     ],
     backgroundColor: Color(0xE6615EF1),
     type: BottomNavigationBarType.fixed,
     currentIndex: widget._currentBar,
     onTap: (index){
       setState(() {
-        widget._currentBar = index;
-        switch(index){
-          case 0:
-            widget.title = 'Infection Graphics';
-            break;
-          case 1:
-            widget.title = 'Global Infection Data';
-            break;
-          case 2:
-            widget.title = 'Settings';
-            break;
-        }
+        _changePage(index);
       });
     },
   );
+
+  checkInternetConnectivity() async {
+    try {
+      await InternetAddress.lookup('google.com');
+    } on SocketException catch (_) {
+      _noNetwork();
+    }
+  }
+
+  Widget _noNetwork(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: 'Oops!',
+        description: 'Please check your internet connection',
+        buttonText: 'Try Again',
+        pageState: this,
+        image: 'no-connection.png',
+      )
+    );
+  }
+
+  _changePage(int index){
+    widget._currentBar = index;
+    switch(index){
+      case 0:
+        widget.title = 'Infection Graphics';
+        break;
+      case 1:
+        widget.title = 'Global Infection Data';
+        break;
+      case 2:
+        widget.title = 'Settings';
+        break;
+    }
+  }
+
+  pop(){
+    setState(() {});
+  }
 }
