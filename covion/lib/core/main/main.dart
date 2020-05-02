@@ -54,7 +54,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   Widget appBar() {
     int height = widget._currentBar == 2 ? 11 : 20;
-    double radius = widget._currentBar == 2 ? 25 : 45;
+    double radius = widget._currentBar == 2 ? 20 : 45;
     int textAlign = widget._currentBar == 2 ? 5 : 6;
 
     return Align(
@@ -128,7 +128,7 @@ class MyHomePageState extends State<MyHomePage> {
       );
     }
 
-    pop(){
+  pop(){
       setState(() {});
     }
 

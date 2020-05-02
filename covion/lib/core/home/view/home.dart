@@ -168,7 +168,7 @@ class DashboardBox{
   }
 
   BoxShadow boxShadow() => BoxShadow(
-    color: Color(0xffabb7c5),
+    color: Color(0x66abb7c5),
     blurRadius: 6.0,
     spreadRadius: 1.0,
     offset: Offset(3, 3.0),
@@ -239,7 +239,7 @@ class ShimmerBox{
   );
 
   BoxShadow boxShadow() => BoxShadow(
-    color: Color(0xffabb7c5),
+    color: Color(0x66abb7c5),
     blurRadius: 6.0,
     spreadRadius: 1.0,
     offset: Offset(3, 3.0),
