@@ -2,13 +2,13 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:covion/controller/GeneralHelper.dart';
+import 'package:covion/utils/GeneralHelper.dart';
 import 'package:covion/model/status_global.dart';
 import 'package:covion/service/global_status_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../main.dart';
+import '../../main/main.dart';
 
 class Dashboard{
   BuildContext context;
